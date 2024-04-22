@@ -13,8 +13,8 @@ export default function Nav(props: { data?: string }) {
 
     const navLink = [
         { label: 'Home', value: "home", href: route('welcome') },
-        { label: 'Blog', value: "blog", href: route('blog.show', {slug:'all'}) },
-        { label: 'Project', value: "project", href: route('project.show', {slug:'all'}) },
+        { label: 'Blog', value: "blog", href: route('blog.show') },
+        { label: 'Project', value: "project", href: route('project.show') },
     ];
 
     return(
@@ -32,6 +32,7 @@ export default function Nav(props: { data?: string }) {
                         navLink.map((n) =>
                         <Link
                             href={n.href}
+                            key={n.value}
                             className={cn((n.value === props.data ? 'text-foreground' : 'text-muted-foreground'), `transition-colors hover:text-foreground`)}
                         >
                             {n.label}
@@ -63,6 +64,7 @@ export default function Nav(props: { data?: string }) {
                                 navLink.map((n) =>
                                 <Link
                                     href={n.href}
+                                    key={n.value}
                                     className={cn((n.value === props.data ? '' : 'text-muted-foreground'), `hover:text-foreground`)}
                                 >
                                     {n.label}

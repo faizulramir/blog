@@ -26,17 +26,25 @@ Route::get('/', function () {
     ]);
 })->name('welcome');
 
-Route::get('/blog/{slug}', function () {
+Route::get('/blog/{year?}/{month?}/{day?}/{title?}', function () {
     return Inertia::render('Blog');
 })->name('blog.show');
 
-Route::get('/project/{slug}', function () {
+Route::get('/project/{year?}/{month?}/{day?}/{title?}', function () {
     return Inertia::render('Project');
 })->name('project.show');
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('Dashboard/Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/admin/blog', function () {
+    return Inertia::render('Dashboard/Blog');
+})->middleware(['auth', 'verified'])->name('admin.blog.show');
+
+Route::get('/admin/project', function () {
+    return Inertia::render('Dashboard/Project');
+})->middleware(['auth', 'verified'])->name('admin.project.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
