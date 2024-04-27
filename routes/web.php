@@ -42,6 +42,10 @@ Route::get('/admin/blog', function () {
     return Inertia::render('Dashboard/Blog');
 })->middleware(['auth', 'verified'])->name('admin.blog.show');
 
+Route::get('/admin/blog/create', function () {
+    return Inertia::render('Dashboard/BlogEditor');
+})->middleware(['auth', 'verified'])->name('admin.blog.create');
+
 Route::get('/admin/project', function () {
     return Inertia::render('Dashboard/Project');
 })->middleware(['auth', 'verified'])->name('admin.project.show');
