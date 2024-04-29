@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
 // => Tiptap packages
 import { useEditor, EditorContent, Editor, BubbleMenu } from "@tiptap/react";
@@ -15,18 +15,13 @@ import History from "@tiptap/extension-history";
 // Custom
 import * as Icons from "../../Icons"
 
-const content = `
-<p>With the History extension the Editor will keep track of your changes. And if you think you made a mistake, you can redo your changes. Try it out, change the content and hit the undo button!</p>
-<p>And yes, you can also use a keyboard shortcut to undo changes (Control/Cmd Z) or redo changes (Control/Cmd Shift Z).</p>
-<p>Wow, this editor has support for links to the whole <a href="https://en.wikipedia.org/wiki/World_Wide_Web">world wide web</a>. We tested a lot of URLs and I think you can add *every URL* you want. Isn’t that cool? Let’s try <a href="https://statamic.com/">another one!</a> Yep, seems to work.</p>
-<p>By default every link will get a <code>rel="noopener noreferrer nofollow"</code> attribute. It’s configurable though.</p>
-<p><strong>This is bold.</strong></p>
-<p><u>This is underlined though.</u></p>
-<p><em>This is italic.</em></p>
-<p><s>But that’s striked through.</s></p>
-<p><code>This is code.</code></p>
-`
-export function SimpleEditor() {
+const content = `Start Writing Here!`
+
+interface EditorProps {
+  setEditorContent: Dispatch<SetStateAction<string>>;
+}
+
+export function SimpleEditor(props:EditorProps) {
   const editor = useEditor({
     extensions: [
       Document,
@@ -42,7 +37,10 @@ export function SimpleEditor() {
       Strike,
       Code
     ],
-    content
+    content,
+    onUpdate({ editor }) {
+      props.setEditorContent(editor.getHTML());
+    },
   }) as Editor;
   const [modalIsOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState<string>("");
@@ -103,6 +101,23 @@ export function SimpleEditor() {
 
   return (
     <div className="editor">
+      {/* <BubbleMenu
+        className="bubble-menu-light"
+        tippyOptions={{ duration: 150 }}
+        editor={editor}
+        shouldShow={({ editor, view, state, oldState, from, to }) => {
+          // only show the bubble menu for links.
+          return from === to && editor.isActive("link");
+        }}
+      >
+        <button className="button" onClick={openModal}>
+          Edit
+        </button>
+        <button className="button-remove" onClick={removeLink}>
+          Remove
+        </button>
+      </BubbleMenu> */}
+
       <div className="menu">
         <button
           className="menu-button"
@@ -118,14 +133,14 @@ export function SimpleEditor() {
         >
           <Icons.RotateRight />
         </button>
-        <button
+        {/* <button
           className={cn("menu-button", {
             "is-active": editor.isActive("link")
           })}
           onClick={openModal}
         >
           <Icons.Link />
-        </button>
+        </button> */}
         <button
           className={cn("menu-button", {
             "is-active": editor.isActive("bold")
@@ -167,23 +182,6 @@ export function SimpleEditor() {
           <Icons.Code />
         </button>
       </div>
-
-      <BubbleMenu
-        className="bubble-menu-light"
-        tippyOptions={{ duration: 150 }}
-        editor={editor}
-        shouldShow={({ editor, view, state, oldState, from, to }) => {
-          // only show the bubble menu for links.
-          return from === to && editor.isActive("link");
-        }}
-      >
-        <button className="button" onClick={openModal}>
-          Edit
-        </button>
-        <button className="button-remove" onClick={removeLink}>
-          Remove
-        </button>
-      </BubbleMenu>
 
       <EditorContent editor={editor} />
 

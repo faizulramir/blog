@@ -16,6 +16,7 @@ import {
 import { Input } from "@/Components/ui/input"
 import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import { SimpleEditor } from './TipTap/SimpleEditor'
+import { useState } from 'react'
 const extensions = [
   StarterKit,
 ]
@@ -28,10 +29,12 @@ const formSchema = z.object({
   }),
   permalink: z.string().min(5, {
     message: "Title must be at least 5 characters.",
-  }),
+  })
 })
 
 export default function TextEditor() {
+  const [editorContent, setEditorContent] = useState("");
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -55,6 +58,7 @@ export default function TextEditor() {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values)
+    console.log(editorContent)
   }
 
   function addPermalink(event:React.FormEvent<HTMLInputElement>) {
@@ -106,7 +110,10 @@ export default function TextEditor() {
             </FormItem>
           )}
         />
-        <SimpleEditor />
+        <FormItem>
+          <FormLabel>Content</FormLabel>
+          <SimpleEditor setEditorContent={setEditorContent}/>
+        </FormItem>
         <Button type="submit">Submit</Button>
       </form>
     </Form>
